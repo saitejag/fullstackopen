@@ -107,6 +107,15 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         })
+        .catch(error => {
+          setNotifMessage(error.response.data.error)
+          setNotifType('error')
+          setTimeout(() => {
+            setNotifMessage(null)
+            setNotifType('added')
+
+          }, 5000)            
+        })
     }
   }
   const handleNameChange = (event) => {
