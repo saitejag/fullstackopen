@@ -13,42 +13,42 @@ app.use(morgan('tiny'))
 
 
 app.get('/api/persons', (request, response) => {
-    Person.find({}).then(result => {
-        response.json(result)
-    })
+  Person.find({}).then(result => {
+    response.json(result)
+  })
 })
 
 app.get('/info',(request, response) => {
-    Person.countDocuments({}).then(result => {
-        const now = new Date();
-        response.send(`Phone book has info for ${result} people\n${now}`)
-    })    
+  Person.countDocuments({}).then(result => {
+    const now = new Date()
+    response.send(`Phone book has info for ${result} people\n${now}`)
+  })
 })
 
-app.get('/api/persons/:id', (request, response) => {
-    Person.findById(request.params.id)
-        .then(person => {
-            if(person){
-                response.json(person)
-            }
-            else {
-                response.status(404).end()
-            }
-        })
-        .catch(error => {
-            // console.log(error)
-            // response.status(400).send({ error: 'malformatted id' })
-            next(error)
-        })
+app.get('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id)
+    .then(person => {
+      if(person){
+        response.json(person)
+      }
+      else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => {
+      // console.log(error)
+      // response.status(400).send({ error: 'malformatted id' })
+      next(error)
+    })
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(person=>{
-        response.status(204).end()
+    .then(() => {
+      response.status(204).end()
     })
     .catch(error => {
-        next(error)
+      next(error)
     })
 })
 
@@ -57,48 +57,48 @@ app.delete('/api/persons/:id', (request, response, next) => {
 // }
 
 app.put('/api/persons/:id',(request, response, next) => {
-    const body = request.body
-    const person = {
-        name: body.name,
-        number: body.number,
-    }
+  const body = request.body
+  const person = {
+    name: body.name,
+    number: body.number,
+  }
 
-    Person.findByIdAndUpdate(request.params.id,person,{ new: true })
-        .then(p => {
-            console.log(p)
-            return response.json(p)
-        })
-        .catch(error => next(error))
+  Person.findByIdAndUpdate(request.params.id,person,{ new: true })
+    .then(p => {
+      console.log(p)
+      return response.json(p)
+    })
+    .catch(error => next(error))
 })
 
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
-//   console.log(Person.exists({name: body.name}))
-//   console.log(body)
+  //   console.log(Person.exists({name: body.name}))
+  //   console.log(body)
   if (!body.name) {
-    return response.status(400).json({ 
-      error: 'name missing' 
+    return response.status(400).json({
+      error: 'name missing'
     })
   }
   else if (!body.number) {
-    return response.status(400).json({ 
-      error: 'number missing' 
+    return response.status(400).json({
+      error: 'number missing'
     })
   }
-//   Person.exists({name: body.name})
-//     .then(result => {
-//         if(result){
-//             return response.status(400).json({ 
-//             error: 'name must be unique' 
-//             })            
-//         }
-//     })
-//   else if (Person.exists({name: body.name})) {
-//   else if (phonebook.map(p => p.name).includes(body.name)) {
-//     return response.status(400).json({ 
-//       error: 'name must be unique' 
-//     })
-//   }  
+  //   Person.exists({name: body.name})
+  //     .then(result => {
+  //         if(result){
+  //             return response.status(400).json({
+  //             error: 'name must be unique'
+  //             })
+  //         }
+  //     })
+  //   else if (Person.exists({name: body.name})) {
+  //   else if (phonebook.map(p => p.name).includes(body.name)) {
+  //     return response.status(400).json({
+  //       error: 'name must be unique'
+  //     })
+  //   }
 
   const person = new Person({
     name: body.name,
