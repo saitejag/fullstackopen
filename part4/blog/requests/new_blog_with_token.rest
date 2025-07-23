@@ -1,0 +1,11 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFCQ0QiLCJpZCI6IjY4ODA2ZmI2NTczZTdkZDc4MWVhYWZkZiIsImlhdCI6MTc1MzI1NjgzMiwiZXhwIjoxNzUzMjYwNDMyfQ.qcVvOxEERyINyQjRhUlx7SxvISDXzeC-vadL6fdkQtI
+
+{
+    "title": "ABCD",
+    "author": "DEF",
+    "url": "a.com",
+    "likes": "10",
+    "user": "68806fb6573e7dd781eaafdf"
+}
