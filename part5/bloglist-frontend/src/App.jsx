@@ -10,7 +10,7 @@ import Togglable from './components/Togglable'
 const App = () => {
   const [blogs, setBlogs] = useState([])
 
-  const [username, setUsername] = useState('') 
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
@@ -32,16 +32,16 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
-        blogs.sort((a, b) => b.likes - a.likes)
-        setBlogs( blogs )
+      blogs.sort((a, b) => b.likes - a.likes)
+      setBlogs( blogs )
 
-      }
-    )  
+    }
+    )
   }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
       const user = await loginService.login({
         username, password,
@@ -58,19 +58,19 @@ const App = () => {
       // setTimeout(() => {
       //   setErrorMessage(null)
       // }, 5000)
-      setNotifMessage("wrong username or password")
+      setNotifMessage('wrong username or password')
       setTimeout(() => {
         setNotifMessage(null)
-      }, 5000)       
+      }, 5000)
       console.log(exception)
     }
-  } 
+  }
 
   const handleLogout = async (event) => {
     window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
   }
-  
+
   const handleCreate = async (event) => {
     event.preventDefault()
     const blogObj = {
@@ -85,27 +85,27 @@ const App = () => {
       console.log(resp)
 
       setBlogs(blogs.concat(resp).sort((a, b) => b.likes - a.likes))
-      setTitle("")
-      setAuthor("")
-      setUrl("")
-      setNotifMessage(resp.title + " by " + resp.author + " added")
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+      setNotifMessage(resp.title + ' by ' + resp.author + ' added')
       setTimeout(() => {
         setNotifMessage(null)
-      }, 5000)         
+      }, 5000)
     }
     catch (exception){
       console.log(exception)
       setNotifMessage(exception)
       setTimeout(() => {
         setNotifMessage(null)
-      }, 5000)       
+      }, 5000)
     }
   }
 
   const handleLike = (event, blog) => {
     event.preventDefault()
     try{
-      const newObj = {...blog, likes: blog.likes + 1}
+      const newObj = { ...blog, likes: blog.likes + 1 }
       blogService.update(blog.id, newObj)
       const updatedBlogs = blogs.map(b => b.id === blog.id ? { ...b, likes: blog.likes + 1 } : b)
       updatedBlogs.sort((a, b) => b.likes - a.likes)
@@ -128,7 +128,7 @@ const App = () => {
         console.log(exception)
       }
     }
-  }  
+  }
 
   const blogDiv = () => (
     <div>
@@ -141,23 +141,23 @@ const App = () => {
       <Togglable buttonLabel="new note" ref={blogFormRef}>
         <BlogForm handleCreate={handleCreate} setTitle={setTitle} setAuthor={setAuthor} setUrl={setUrl} title={title} url={url} author={author}/>
       </Togglable>
-    </div>    
+    </div>
   )
 
   const loginForm = () => {
     return (
       <Togglable buttonLabel="login">
-          <LoginForm
-            username={username}
-            password={password}
-            handleUsernameChange={({ target }) => setUsername(target.value)}
-            handlePasswordChange={({ target }) => setPassword(target.value)}
-            handleSubmit={handleLogin}
-          />        
+        <LoginForm
+          username={username}
+          password={password}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+          handleSubmit={handleLogin}
+        />
       </Togglable>
     )
   }
-  
+
   return (
     <div>
       <Notification message={notifMessage} type="noti"/>

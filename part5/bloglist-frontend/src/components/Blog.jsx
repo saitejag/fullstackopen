@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import PropTypes from 'prop-types'
 
-const Blog = ({ blog, handleLike, handleDelete}) => {
+const Blog = ({ blog, handleLike, handleDelete }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -10,33 +11,39 @@ const Blog = ({ blog, handleLike, handleDelete}) => {
   }
   const [visible, setVisible] = useState(false)
 
-  
+
   if(!visible){
     return (
       <div style={blogStyle}>
         {blog.title} {blog.author}
         <button onClick={() => {setVisible(!visible)}}>view</button>
-      </div>  
+      </div>
     )
   }
   else{
     return (
       <div style={blogStyle}>
-      {blog.title} {blog.author}
-      <button onClick={() => setVisible(!visible)}>hide</button>
-      <br />
-      <a href={blog.url}>{blog.url}</a>
-      <br />
+        {blog.title} {blog.author}
+        <button onClick={() => setVisible(!visible)}>hide</button>
+        <br />
+        <a href={blog.url}>{blog.url}</a>
+        <br />
       likes {blog.likes}
-      <button onClick={(event) => handleLike(event, blog)}>like</button>
-      <p>{blog.user.name}</p>
-      <button onClick={(event) => handleDelete(event, blog)} style={{ color: 'blue' }}>remove</button>
-      </div>  
+        <button onClick={(event) => handleLike(event, blog)}>like</button>
+        <p>{blog.user.name}</p>
+        <button onClick={(event) => handleDelete(event, blog)} style={{ color: 'blue' }}>remove</button>
+      </div>
     )
   }
 }
 
-const BlogForm = ({handleCreate,setTitle,setAuthor,setUrl,title,author,url}) => {
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  handleLike: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired
+}
+
+const BlogForm = ({ handleCreate,setTitle,setAuthor,setUrl,title,author,url }) => {
   return (
     <div>
       <h2>create new</h2>
@@ -49,4 +56,4 @@ const BlogForm = ({handleCreate,setTitle,setAuthor,setUrl,title,author,url}) => 
 
 }
 
-export { Blog, BlogForm };
+export { Blog, BlogForm }
